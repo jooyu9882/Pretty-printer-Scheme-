@@ -35,11 +35,13 @@ public class Scanner {
 
 			// TODO: Skip white space and comments
 			while (ch == ' ' || ch == '\t' || ch == '\n' || ch == ';') {
+
 				if (ch == ';') {
-					// Skip the rest of the line
 					while (ch != '\n' && ch != -1)
 						ch = in.read();
-				} else
+				}
+
+				else
 					ch = in.read();
 			}
 			// Return null on EOF
@@ -83,10 +85,14 @@ public class Scanner {
 					ch = in.read();
 					if (ch == '"') {
 						return new StrToken(new String(buf,0, i));
-					} else if (ch == -1) {
+					} 
+
+					else if (ch == -1) {
 						System.err.println("Unexpected EOF in string");
 						return null;
-					} else {
+					}
+
+					else {
 						buf[i++] = (byte)ch;
 					}
 				}
@@ -98,9 +104,12 @@ public class Scanner {
 				// TODO: scan the number and convert it to an integer
 				 while (true) {
 					ch = in.read();
+
 					if (ch >= '0' && ch <= '9') {
 						i = i * 10 + (ch - '0');
-					} else {
+					}
+					
+					else {
 						in.unread(ch);
 						break;
 					}
@@ -119,10 +128,12 @@ public class Scanner {
 				while (true) {
 					buf[i++] = (byte)ch;
 					ch = in.read();
-					if ((ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')
-						/* or ch is some other valid non-first character for an identifier */) {
+
+					if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) {
 						continue;
-					} else {
+					}
+					
+					else {
 						in.unread(ch);
 						break;
 					}
@@ -130,7 +141,7 @@ public class Scanner {
 				// Put the character after the identifier back into the input
 				// in.unread(ch);
 
-				return new IdentToken(buf.toString());
+				return new IdentToken(new String(buf, 0, i));
 			}
 
 			// Illegal character
