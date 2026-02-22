@@ -10,13 +10,11 @@ public class Regular extends Special {
     }
 
     private boolean simpleList(Node node) {
-        // true if the first element is an Ident and all following elements are Idents or literals
         if (!(node instanceof Cons)) return false;
-
         Node curr = node;
         while (curr instanceof Cons) {
             Node car = ((Cons) curr).getCar();
-            if (car instanceof Cons) return false; // nested list → complex
+            if (car instanceof Cons) return false; // nested sublist → complex
             curr = ((Cons) curr).getCdr();
         }
         return true;
@@ -24,15 +22,14 @@ public class Regular extends Special {
 
     @Override
     public void print(Node node, int n, boolean p) {
+        if (!(node instanceof Cons)) return;
+
         Cons c = (Cons) node;
 
-        if (c == null) return;
-
-        // SIMPLE LIST: inline
+        // If list is simple, print inline
         if (simpleList(c)) {
             indent(n);
             System.out.print("(");
-
             Node curr = c;
             boolean first = true;
             while (curr instanceof Cons) {
@@ -41,27 +38,27 @@ public class Regular extends Special {
                 first = false;
                 curr = ((Cons) curr).getCdr();
             }
-
             System.out.print(")");
             return;
         }
 
-        // COMPLEX LIST: multiline
+        // Complex list: multiline formatting
         indent(n);
         System.out.print("(");
+
         Node curr = c;
         boolean first = true;
         while (curr instanceof Cons) {
             Node elem = ((Cons) curr).getCar();
-
+            if (!first) System.out.println();
             if (first) {
-                elem.print(0, false); // first element stays on same line
+                // first element stays on same line
+                elem.print(0, false);
                 first = false;
             } else {
-                System.out.println();
+                // indent nested expressions by +2 spaces
                 elem.print(n + 2, false);
             }
-
             curr = ((Cons) curr).getCdr();
         }
 
