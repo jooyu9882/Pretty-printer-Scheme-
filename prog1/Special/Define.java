@@ -9,7 +9,10 @@ public class Define extends Special {
             System.out.print(" ");
     }
 
-    public void print(Cons c, int n, boolean p) {
+    @Override
+    public void print(Node node, int n, boolean p) {
+
+        Cons c = (Cons) node;
 
         indent(n);
         System.out.print("(define ");
