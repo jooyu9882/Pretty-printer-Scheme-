@@ -13,7 +13,7 @@ import Special.Regular;
 import Special.Set;
 import Special.Special;
 
-public class Cond extends Node {
+public class Cons extends Node {
     private Node car;
     private Node cdr;
     private Special form;
