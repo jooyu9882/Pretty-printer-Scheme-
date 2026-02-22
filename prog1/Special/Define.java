@@ -2,7 +2,7 @@ package Special;
 
 import Tree.*;
 
-public class Define implements Special {
+public class Define extends Special {
 
     private void indent(int n) {
         for (int i = 0; i < n; i++)
@@ -15,7 +15,7 @@ public class Define implements Special {
         System.out.print("(define ");
 
         Node signature = c.getCdrCar();   // second element
-        Node body = c.getCdrCdr();        // rest of definition
+        Node body = c.getCdrCdr();        // rest
 
         /* -----------------------------
            Case 1: Variable definition
@@ -39,10 +39,9 @@ public class Define implements Special {
            (define (f x y) body...)
         ------------------------------*/
 
-        // Print the header inline
+        // Print header inline
         signature.print(0, false);
 
-        // Now print the body
         Node exprs = body;
 
         while (exprs instanceof Cons) {
