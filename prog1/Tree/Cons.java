@@ -15,7 +15,7 @@ public class Cons extends Node {
     }
 
     // Allow Parser to set the Special form
-    public void setSpecial(Special s) {
+    public void setForm(Special s) {
         form = s;
     }
 
