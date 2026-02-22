@@ -1,33 +1,33 @@
-// BooleanLit -- Parse tree node class for representing boolean literals
+// BoolLit -- Parse tree node class for representing boolean literals
 
 package Tree;
 
 public class BoolLit extends Node {
     private boolean boolVal;
 
-    private static BoolLit trueInstance = new BoolLit(true);
-    private static BoolLit falseInstance = new BoolLit(false);
+    // Singleton instances for #t and #f
+    private static final BoolLit trueInstance = new BoolLit(true);
+    private static final BoolLit falseInstance = new BoolLit(false);
 
+    // Static constants for easy access in Parser.java
+    public static final BoolLit TRUE  = trueInstance;
+    public static final BoolLit FALSE = falseInstance;
+
+    // Private constructor
     private BoolLit(boolean b) {
         boolVal = b;
     }
 
+    // Optional getter method if you want to get instance dynamically
     public static BoolLit getInstance(boolean val) {
-        if (val)
-            return trueInstance;
-        else
-            return falseInstance;
+        return val ? trueInstance : falseInstance;
     }
 
+    // Print method with n-space indentation
     public void print(int n) {
-        // There got to be a more efficient way to print n spaces.
         for (int i = 0; i < n; i++)
             System.out.print(" ");
 
-        if (boolVal) {
-            System.out.println("#t");
-        } else {
-            System.out.println("#f");
-        }
+        System.out.println(boolVal ? "#t" : "#f");
     }
 }
