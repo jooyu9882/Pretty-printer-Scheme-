@@ -1,42 +1,78 @@
 package Special;
 
-import Tree.Node;
-import Tree.Cons;
-import Tree.Nil;
+import Tree.*;
 
 public class Regular extends Special {
 
-    @Override
-    public void print(Node t, int n, boolean p) {
-        if (!(t instanceof Cons)) return;
-        Cons cons = (Cons) t;
-
-        if (!p) {
-            for (int i = 0; i < n; i++) System.out.print(" ");
-            System.out.print("(");
-        }
-
-        Node first = cons.getCar();
-        Node rest = cons.getCdr();
-
-        first.print(0, false);
-
-        Node current = rest;
-        while (current instanceof Cons) {
+    private void indent(int n) {
+        for (int i = 0; i < n; i++)
             System.out.print(" ");
-            ((Cons) current).getCar().print(0, false);
-            current = ((Cons) current).getCdr();
+    }
+
+    private boolean simpleList(Node node) {
+        // true if all elements are atoms (not Cons)
+        while (node instanceof Cons) {
+            Node car = ((Cons) node).getCar();
+            if (car instanceof Cons)
+                return false;
+            node = ((Cons) node).getCdr();
+        }
+        return true;
+    }
+
+    @Override
+    public void print(Node node, int n, boolean p) {
+
+        Cons c = (Cons) node;
+
+        /* ---------- SIMPLE LIST (INLINE) ---------- */
+
+        if (simpleList(c)) {
+
+            indent(n);
+            System.out.print("(");
+
+            Node curr = c;
+            boolean first = true;
+
+            while (curr instanceof Cons) {
+
+                if (!first)
+                    System.out.print(" ");
+
+                ((Cons) curr).getCar().print(0, false);
+
+                first = false;
+                curr = ((Cons) curr).getCdr();
+            }
+
+            System.out.print(")");
+            return;
         }
 
-        if (current instanceof Nil) {
-            System.out.print(")");
-        } else {
-            System.out.print(" . ");
-            current.print(0, false);
-            System.out.print(")");
+        /* ---------- COMPLEX LIST (MULTILINE) ---------- */
+
+        indent(n);
+        System.out.print("(");
+
+        Node curr = c;
+        boolean first = true;
+
+        while (curr instanceof Cons) {
+
+            Node elem = ((Cons) curr).getCar();
+
+            if (first) {
+                elem.print(0, false);
+                first = false;
+            } else {
+                System.out.println();
+                elem.print(n + 2, false);
+            }
+
+            curr = ((Cons) curr).getCdr();
         }
 
-        // IMPORTANT: removed System.out.println();
-        // DO NOT print a newline here
+        System.out.print(")");
     }
 }
