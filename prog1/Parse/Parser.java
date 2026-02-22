@@ -8,7 +8,6 @@ public class Parser {
 private Scanner scanner;
 private Token lookahead = null;   // one-token lookahead
 
-```
 public Parser(Scanner s) {
     scanner = s;
 }
@@ -160,9 +159,6 @@ private Node parseList() {
     }
 
     return list;
-}
-```
-
 }
 
 }
