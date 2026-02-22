@@ -4,7 +4,7 @@ package Special;
 
 import Tree.Node;
 
-public class Cons extends Special {
+public class Cond extends Special {
  
     public void print(Node t, int n, boolean p) {
     }
