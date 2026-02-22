@@ -2,10 +2,10 @@
 
 package Tree;
 
-public class StrLit extends Node {
+public class StringLit extends Node {
     private String strVal;
 
-    public StrLit(String s) {
+    public StringLit(String s) {
         strVal = s;
     }
 
