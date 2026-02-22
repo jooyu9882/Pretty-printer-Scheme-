@@ -1,4 +1,5 @@
 // Cons -- Parse tree node class for representing a Cons nodepackage Tree;
+package Tree;
 
 import Special.*;
 
