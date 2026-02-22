@@ -1,4 +1,4 @@
-// Parser -- Recursive-descent parser for Scheme Pretty-Printer
+// Parser -- Recursive-descent parser for Scheme Pretty-Printer 
 
 package Parse;
 
@@ -34,12 +34,12 @@ public class Parser {
         if (tok == null) return null;
 
         switch (tok.getType()) {
-            case TRUE: return BoolLit.TRUE;
-            case FALSE: return BoolLit.FALSE;
+            case TRUE: return BoolLit.getInstance(true);
+            case FALSE: return BoolLit.getInstance(false);
             case INT: return new IntLit(tok.getIntVal());
-            case STRING: return new StringLit(tok.getStrVal());
+            case STRING: return new StrLit(tok.getStrVal());
             case IDENT: return new Ident(tok.getName().toLowerCase());
-            case QUOTE: // 'exp => (quote exp)
+            case QUOTE:
                 Node quoted = parseExp();
                 return new Cons(new Ident("quote"), new Cons(quoted, Nil.getInstance()));
             case LPAREN: return parseRest();
@@ -47,13 +47,17 @@ public class Parser {
             case DOT:
             default:
                 System.err.println("Unexpected token: " + tok.getType());
-                return parseExp(); // skip invalid token
+                return Nil.getInstance(); // skip invalid token safely
         }
     }
 
     // Parse a list (rest)
     protected Node parseRest() {
         Token tok = nextToken();
+        if (tok == null) {
+            System.err.println("Unexpected EOF in list");
+            return Nil.getInstance();
+        }
 
         // Empty list
         if (tok.getType() == TokenType.RPAREN) {
@@ -66,18 +70,18 @@ public class Parser {
 
         // Check for dotted list
         tok = nextToken();
-        if (tok.getType() == TokenType.DOT) {
+        if (tok != null && tok.getType() == TokenType.DOT) {
             Node second = parseExp();
             Token closing = nextToken();
-            if (closing.getType() != TokenType.RPAREN) {
+            if (closing == null || closing.getType() != TokenType.RPAREN) {
                 System.err.println("Expected ')' after dotted pair");
             }
             return new Cons(first, second);
-        } else if (tok.getType() == TokenType.RPAREN) {
+        } else if (tok != null && tok.getType() == TokenType.RPAREN) {
             return new Cons(first, Nil.getInstance());
         } else {
             // Regular list: put back token and parse recursively
-            pushBack(tok);
+            if (tok != null) pushBack(tok);
             Node rest = parseRest();
             Cons consNode = new Cons(first, rest);
 
@@ -85,18 +89,18 @@ public class Parser {
             if (first instanceof Ident) {
                 String name = ((Ident) first).getName();
                 switch (name) {
-                    case "quote": consNode.setSpecial(new Special.Quote()); break;
-                    case "lambda": consNode.setSpecial(new Special.Lambda()); break;
-                    case "begin": consNode.setSpecial(new Special.Begin()); break;
-                    case "if": consNode.setSpecial(new Special.If()); break;
-                    case "let": consNode.setSpecial(new Special.Let()); break;
-                    case "cond": consNode.setSpecial(new Special.Cond()); break;
-                    case "define": consNode.setSpecial(new Special.Define()); break;
-                    case "set!": consNode.setSpecial(new Special.Set()); break;
-                    default: consNode.setSpecial(new Special.Regular());
+                    case "quote": consNode.setForm(new Special.Quote()); break;
+                    case "lambda": consNode.setForm(new Special.Lambda()); break;
+                    case "begin": consNode.setForm(new Special.Begin()); break;
+                    case "if": consNode.setForm(new Special.If()); break;
+                    case "let": consNode.setForm(new Special.Let()); break;
+                    case "cond": consNode.setForm(new Special.Cond()); break;
+                    case "define": consNode.setForm(new Special.Define()); break;
+                    case "set!": consNode.setForm(new Special.Set()); break;
+                    default: consNode.setForm(new Special.Regular());
                 }
             } else {
-                consNode.setSpecial(new Special.Regular());
+                consNode.setForm(new Special.Regular());
             }
 
             return consNode;
