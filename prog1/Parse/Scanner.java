@@ -121,27 +121,24 @@ public class Scanner {
 			}
 
 			// Identifiers
-			else if (ch >= 'A' && ch <= 'Z'
-				/* or ch is some other valid first character for an identifier */) {
-				// TODO: scan an identifier into the buffer variable buf
-				int i = 0;
-				while (true) {
-					buf[i++] = (byte)ch;
-					ch = in.read();
-
-					if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) {
-						continue;
-					}
-					
-					else {
-						in.unread(ch);
-						break;
-					}
-				}
-				// Put the character after the identifier back into the input
-				// in.unread(ch);
-
-				return new IdentToken(new String(buf, 0, i));
+			else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
+			    int i = 0;
+			    // Read first character
+			    buf[i++] = (byte) ch;
+			    
+			    // Read subsequent characters (letters or digits)
+			    while (true) {
+			        ch = in.read();
+			        if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) {
+			            buf[i++] = (byte) ch;
+			        } else {
+			            // put back the non-identifier character
+			            if (ch != -1) in.unread(ch);
+			            break;
+			        }
+			    }
+			    
+			    return new IdentToken(new String(buf, 0, i));
 			}
 
 			// Illegal character
