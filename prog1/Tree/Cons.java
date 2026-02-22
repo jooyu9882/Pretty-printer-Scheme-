@@ -18,7 +18,7 @@ public class Cons extends Node {
     private Node cdr;
     private Special form;
 
-    public Cond(Node a, Node d) {
+    public Cons(Node a, Node d) {
         car = a;
         cdr = d;
         parseList();
