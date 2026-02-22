@@ -1,30 +1,57 @@
 package Special;
 
-import Tree.Node;
-import Tree.Cons;
+import Tree.*;
 
-public class Define extends Special {
+public class Define implements Special {
 
-    @Override
-    public void print(Node t, int n, boolean p) {
-        if (!(t instanceof Cons)) return;
-        Cons cons = (Cons) t;
+    private void indent(int n) {
+        for (int i = 0; i < n; i++)
+            System.out.print(" ");
+    }
 
-        Node first = cons.getCdrCar();
-        Node rest = cons.getCdrCdr();
+    public void print(Cons c, int n, boolean p) {
 
-        for (int i = 0; i < n; i++) System.out.print(" ");
+        indent(n);
         System.out.print("(define ");
-        first.print(0, false);
-        System.out.println();
 
-        Node current = rest;
-        while (current instanceof Cons) {
-            ((Cons) current).getCar().print(n + 2, false);
-            current = ((Cons) current).getCdr();
+        Node signature = c.getCdrCar();   // second element
+        Node body = c.getCdrCdr();        // rest of definition
+
+        /* -----------------------------
+           Case 1: Variable definition
+           (define x 5)
+        ------------------------------*/
+        if (!(signature instanceof Cons)) {
+
+            signature.print(0, false);
+
+            if (body instanceof Cons) {
+                System.out.println();
+                ((Cons) body).getCar().print(n + 2, false);
+            }
+
+            System.out.print(")");
+            return;
         }
 
-        for (int i = 0; i < n; i++) System.out.print(" ");
-        System.out.println(")");
+        /* -----------------------------
+           Case 2: Function definition
+           (define (f x y) body...)
+        ------------------------------*/
+
+        // Print the header inline
+        signature.print(0, false);
+
+        // Now print the body
+        Node exprs = body;
+
+        while (exprs instanceof Cons) {
+            Node exp = ((Cons) exprs).getCar();
+            System.out.println();
+            exp.print(n + 2, false);
+            exprs = ((Cons) exprs).getCdr();
+        }
+
+        System.out.print(")");
     }
 }
