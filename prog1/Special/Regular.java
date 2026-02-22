@@ -4,13 +4,11 @@ import Tree.*;
 
 public class Regular extends Special {
 
-    // print n spaces for indentation
     private void indent(int n) {
         for (int i = 0; i < n; i++)
             System.out.print(" ");
     }
 
-    // true if the list contains only atoms (no nested Cons)
     private boolean simpleList(Node node) {
         while (node instanceof Cons) {
             Node car = ((Cons) node).getCar();
@@ -24,15 +22,14 @@ public class Regular extends Special {
     @Override
     public void print(Node node, int n, boolean p) {
         if (!(node instanceof Cons))
-            return; // safety
+            return;
 
         Cons c = (Cons) node;
 
-        // ---- SIMPLE LIST: print inline ----
+        // SIMPLE LIST: print inline
         if (simpleList(c)) {
             if (!p) indent(n);
             System.out.print("(");
-
             Node curr = c;
             boolean first = true;
             while (curr instanceof Cons) {
@@ -41,12 +38,11 @@ public class Regular extends Special {
                 first = false;
                 curr = ((Cons) curr).getCdr();
             }
-
             System.out.print(")");
             return;
         }
 
-        // ---- COMPLEX LIST: multiline ----
+        // COMPLEX LIST: multiline
         if (!p) indent(n);
         System.out.print("(");
 
@@ -55,13 +51,9 @@ public class Regular extends Special {
         while (curr instanceof Cons) {
             Node elem = ((Cons) curr).getCar();
 
-            if (first) {
-                elem.print(0, false); // first element printed inline
-                first = false;
-            } else {
-                System.out.println();
-                elem.print(n + 2, false); // indent nested elements
-            }
+            if (!first) System.out.println();
+            elem.print(n + 2, false); // always indent nested elements by n+2
+            first = false;
 
             curr = ((Cons) curr).getCdr();
         }
