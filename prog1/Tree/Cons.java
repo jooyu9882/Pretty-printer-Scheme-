@@ -19,6 +19,11 @@ public class Cons extends Node {
         form = s;
     }
 
+    // Allow Parser to link nodes in iterative list construction
+    public void setCdr(Node n) {
+        cdr = n;
+    }
+
     // Accessors
     public Node getCar() { return car; }
     public Node getCdr() { return cdr; }
@@ -50,7 +55,7 @@ public class Cons extends Node {
         return null;
     }
 
-    // Printing dispatch (THIS is the key)
+    // Printing dispatch (Special handles formatting)
     @Override
     public void print(int n) {
         form.print(this, n, false);
