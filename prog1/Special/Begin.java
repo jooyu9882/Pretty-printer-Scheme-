@@ -1,11 +1,29 @@
-// Begin -- Parse tree node strategy for printing the special form begin
-
 package Special;
 
 import Tree.Node;
+import Tree.Cons;
+import Tree.Nil;
 
 public class Begin extends Special {
- 
+
+    @Override
     public void print(Node t, int n, boolean p) {
+        if (!(t instanceof Cons)) return;
+        Cons cons = (Cons) t;
+
+        // print opening line
+        for (int i = 0; i < n; i++) System.out.print(" ");
+        System.out.println("(begin");
+
+        // print each subexpression, indented by 2
+        Node rest = cons.getCdr();
+        while (rest instanceof Cons) {
+            Node element = ((Cons) rest).getCar();
+            element.print(n + 2, false);
+            rest = ((Cons) rest).getCdr();
+        }
+
+        for (int i = 0; i < n; i++) System.out.print(" ");
+        System.out.println(")");
     }
 }
