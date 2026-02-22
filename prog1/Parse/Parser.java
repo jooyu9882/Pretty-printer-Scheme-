@@ -37,7 +37,7 @@ public class Parser {
             case TRUE: return BoolLit.getInstance(true);
             case FALSE: return BoolLit.getInstance(false);
             case INT: return new IntLit(tok.getIntVal());
-            case STRING: return new StrLit(tok.getStrVal());
+            case STRING: return new StringLit(tok.getStrVal());
             case IDENT: return new Ident(tok.getName().toLowerCase());
             case QUOTE:
                 Node quoted = parseExp();
