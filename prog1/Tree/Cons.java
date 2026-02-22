@@ -1,17 +1,6 @@
-// Cons -- Parse tree node class for representing a Cons node
+// Cons -- Parse tree node class for representing a Cons nodepackage Tree;
 
-package Tree;
-
-import Special.Begin;
-import Special.Cond;
-import Special.Define;
-import Special.If;
-import Special.Lambda;
-import Special.Let;
-import Special.Quote;
-import Special.Regular;
-import Special.Set;
-import Special.Special;
+import Special.*;
 
 public class Cons extends Node {
     private Node car;
@@ -30,19 +19,33 @@ public class Cons extends Node {
     }
 
     // Accessors for car and cdr
-    public Node getCar() {
-        return car;
+    public Node getCar() { return car; }
+    public Node getCdr() { return cdr; }
+
+    // Convenience methods used by Special subclasses
+    public Node getCdrCar() {
+        if (cdr instanceof Cons) return ((Cons)cdr).getCar();
+        return null;
     }
 
-    public Node getCdr() {
-        return cdr;
+    public Node getCdrCdr() {
+        if (cdr instanceof Cons) return ((Cons)cdr).getCdr();
+        return null;
     }
 
-    public void print(int n) {
-        form.print(this, n, false);
+    public Node getCdrCdrCar() {
+        Node cdr2 = getCdrCdr();
+        if (cdr2 instanceof Cons) return ((Cons)cdr2).getCar();
+        return null;
     }
 
-    public void print(int n, boolean p) {
-        form.print(this, n, p);
+    public Node getCdrCdrCdrCar() {
+        Node cdr3 = getCdrCdr();
+        if (cdr3 instanceof Cons) return ((Cons)cdr3).getCdrCar();
+        return null;
     }
+
+    // Printing methods
+    public void print(int n) { form.print(this, n, false); }
+    public void print(int n, boolean p) { form.print(this, n, p); }
 }
