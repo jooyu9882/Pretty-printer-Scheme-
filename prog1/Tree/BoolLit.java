@@ -2,17 +2,17 @@
 
 package Tree;
 
-public class BooleanLit extends Node {
+public class BoolLit extends Node {
     private boolean boolVal;
 
-    private static BooleanLit trueInstance = new BooleanLit(true);
-    private static BooleanLit falseInstance = new BooleanLit(false);
+    private static BoolLit trueInstance = new BoolLit(true);
+    private static BoolLit falseInstance = new BoolLit(false);
 
-    private BooleanLit(boolean b) {
+    private BoolLit(boolean b) {
         boolVal = b;
     }
 
-    public static BooleanLit getInstance(boolean val) {
+    public static BoolLit getInstance(boolean val) {
         if (val)
             return trueInstance;
         else
