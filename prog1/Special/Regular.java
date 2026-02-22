@@ -11,35 +11,32 @@ public class Regular extends Special {
         if (!(t instanceof Cons)) return;
         Cons cons = (Cons) t;
 
-        // Only indent if we are not inside parentheses already
         if (!p) {
             for (int i = 0; i < n; i++) System.out.print(" ");
+            System.out.print("(");
         }
 
-        System.out.print("(");
+        Node first = cons.getCar();
+        Node rest = cons.getCdr();
 
-        Node current = cons;
-        boolean first = true;
+        first.print(0, false);
 
+        Node current = rest;
         while (current instanceof Cons) {
-            Cons c = (Cons) current;
-
-            if (!first)
-                System.out.print(" ");
-
-            c.getCar().print(0, true);  // IMPORTANT: true keeps it inline
-
-            current = c.getCdr();
-            first = false;
+            System.out.print(" ");
+            ((Cons) current).getCar().print(0, false);
+            current = ((Cons) current).getCdr();
         }
 
-        // dotted pair
-        if (!(current instanceof Nil)) {
+        if (current instanceof Nil) {
+            System.out.print(")");
+        } else {
             System.out.print(" . ");
-            current.print(0, true);
+            current.print(0, false);
+            System.out.print(")");
         }
 
-        System.out.print(")");
-        // NO println here — this is the critical fix
+        // IMPORTANT: removed System.out.println();
+        // DO NOT print a newline here
     }
 }
