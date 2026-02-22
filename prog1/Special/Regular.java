@@ -9,13 +9,13 @@ public class Regular extends Special {
             System.out.print(" ");
     }
 
-    private boolean simpleList(Node node) {
-        if (!(node instanceof Cons)) return false;
-        Node curr = node;
-        while (curr instanceof Cons) {
-            Node car = ((Cons) curr).getCar();
-            if (car instanceof Cons) return false; // nested sublist → complex
-            curr = ((Cons) curr).getCdr();
+    // true if the list contains only atoms (not Cons)
+    private boolean isSimpleList(Node node) {
+        while (node instanceof Cons) {
+            Node car = ((Cons) node).getCar();
+            if (car instanceof Cons)
+                return false;
+            node = ((Cons) node).getCdr();
         }
         return true;
     }
@@ -23,45 +23,48 @@ public class Regular extends Special {
     @Override
     public void print(Node node, int n, boolean p) {
         if (!(node instanceof Cons)) return;
+        Cons cons = (Cons) node;
 
-        Cons c = (Cons) node;
-
-        // If list is simple, print inline
-        if (simpleList(c)) {
+        if (!p) {
             indent(n);
             System.out.print("(");
-            Node curr = c;
-            boolean first = true;
-            while (curr instanceof Cons) {
-                if (!first) System.out.print(" ");
-                ((Cons) curr).getCar().print(0, false);
-                first = false;
-                curr = ((Cons) curr).getCdr();
-            }
-            System.out.print(")");
-            return;
         }
 
-        // Complex list: multiline formatting
-        indent(n);
-        System.out.print("(");
+        Node first = cons.getCar();
+        Node rest = cons.getCdr();
 
-        Node curr = c;
-        boolean first = true;
-        while (curr instanceof Cons) {
-            Node elem = ((Cons) curr).getCar();
-            if (!first) System.out.println();
-            if (first) {
-                // first element stays on same line
-                elem.print(0, false);
-                first = false;
+        // Print the first element
+        first.print(0, false);
+
+        Node current = rest;
+        boolean firstPrinted = true;
+
+        while (current instanceof Cons) {
+            Node car = ((Cons) current).getCar();
+
+            if (isSimpleList(car)) {
+                // Simple element: print inline
+                System.out.print(" ");
+                car.print(0, false);
             } else {
-                // indent nested expressions by +2 spaces
-                elem.print(n + 2, false);
+                // Nested list: print newline + indentation
+                System.out.println();
+                car.print(n + 2, false);
             }
-            curr = ((Cons) curr).getCdr();
+
+            current = ((Cons) current).getCdr();
+            firstPrinted = false;
         }
 
-        System.out.print(")");
+        if (current instanceof Nil) {
+            System.out.print(")");
+        } else {
+            System.out.print(" . ");
+            current.print(0, false);
+            System.out.print(")");
+        }
+
+        // Only print a newline if this is a top-level call
+        if (!p) System.out.println();
     }
 }
