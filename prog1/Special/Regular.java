@@ -26,7 +26,7 @@ public class Regular extends Special {
 
         Cons c = (Cons) node;
 
-        // SIMPLE LIST: print inline
+        // SIMPLE LIST: all atoms, print inline
         if (simpleList(c)) {
             if (!p) indent(n);
             System.out.print("(");
@@ -42,17 +42,22 @@ public class Regular extends Special {
             return;
         }
 
-        // COMPLEX LIST: multiline
+        // COMPLEX LIST
         if (!p) indent(n);
         System.out.print("(");
 
         Node curr = c;
         boolean first = true;
+
         while (curr instanceof Cons) {
             Node elem = ((Cons) curr).getCar();
 
-            if (!first) System.out.println();
-            elem.print(n + 2, false); // always indent nested elements by n+2
+            if (!first) {
+                System.out.println();
+                indent(n + 2);  // indent subsequent elements
+            }
+
+            elem.print(first ? 0 : n + 2, first); // first element prints inline
             first = false;
 
             curr = ((Cons) curr).getCdr();
