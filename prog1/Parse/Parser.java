@@ -41,7 +41,7 @@ public class Parser {
             case IDENT: return new Ident(tok.getName().toLowerCase());
             case QUOTE: // 'exp => (quote exp)
                 Node quoted = parseExp();
-                return new Cons(new Ident("quote"), new Cons(quoted, Nil.NIL));
+                return new Cons(new Ident("quote"), new Cons(quoted, Nil.getInstance()));
             case LPAREN: return parseRest();
             case RPAREN:
             case DOT:
@@ -57,7 +57,7 @@ public class Parser {
 
         // Empty list
         if (tok.getType() == TokenType.RPAREN) {
-            return Nil.NIL;
+            return Nil.getInstance();
         }
 
         // Put back first token of first element
@@ -74,7 +74,7 @@ public class Parser {
             }
             return new Cons(first, second);
         } else if (tok.getType() == TokenType.RPAREN) {
-            return new Cons(first, Nil.NIL);
+            return new Cons(first, Nil.getInstance());
         } else {
             // Regular list: put back token and parse recursively
             pushBack(tok);
