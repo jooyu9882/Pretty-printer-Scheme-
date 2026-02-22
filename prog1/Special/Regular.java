@@ -4,11 +4,13 @@ import Tree.*;
 
 public class Regular extends Special {
 
+    // print n spaces for indentation
     private void indent(int n) {
         for (int i = 0; i < n; i++)
             System.out.print(" ");
     }
 
+    // check if a list is simple (all elements are atoms or Nil, no nested Cons)
     private boolean simpleList(Node node) {
         while (node instanceof Cons) {
             Node car = ((Cons) node).getCar();
@@ -20,17 +22,15 @@ public class Regular extends Special {
     }
 
     @Override
-    public void print(Node node, int n, boolean p) {
-        if (!(node instanceof Cons))
-            return;
+    public void print(Node node, int n, boolean parenthesized) {
+        if (!(node instanceof Cons)) return;
+        Cons cons = (Cons) node;
 
-        Cons c = (Cons) node;
-
-        // SIMPLE LIST: all atoms, print inline
-        if (simpleList(c)) {
-            if (!p) indent(n);
+        // If the list is simple, print entirely inline
+        if (simpleList(cons)) {
+            indent(n);
             System.out.print("(");
-            Node curr = c;
+            Node curr = cons;
             boolean first = true;
             while (curr instanceof Cons) {
                 if (!first) System.out.print(" ");
@@ -42,23 +42,22 @@ public class Regular extends Special {
             return;
         }
 
-        // COMPLEX LIST
-        if (!p) indent(n);
+        // Complex list (multiline)
+        indent(n);
         System.out.print("(");
-
-        Node curr = c;
+        Node curr = cons;
         boolean first = true;
 
         while (curr instanceof Cons) {
-            Node elem = ((Cons) curr).getCar();
+            Node car = ((Cons) curr).getCar();
 
-            if (!first) {
+            if (first) {
+                car.print(0, false); // first element printed inline
+                first = false;
+            } else {
                 System.out.println();
-                indent(n + 2);  // indent subsequent elements
+                car.print(n + 2, false); // subsequent elements indented
             }
-
-            elem.print(first ? 0 : n + 2, first); // first element prints inline
-            first = false;
 
             curr = ((Cons) curr).getCdr();
         }
