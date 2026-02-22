@@ -13,12 +13,12 @@ import Special.Regular;
 import Special.Set;
 import Special.Special;
 
-public class Cons extends Node {
+public class Cond extends Node {
     private Node car;
     private Node cdr;
     private Special form;
 
-    public Cons(Node a, Node d) {
+    public Cond(Node a, Node d) {
         car = a;
         cdr = d;
         parseList();
