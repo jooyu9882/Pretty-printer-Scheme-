@@ -34,7 +34,7 @@ public class Scanner {
 			ch = in.read();
 
 			// TODO: Skip white space and comments
-			while (ch == ' ' || ch == '\t' || ch == '\n' || ch == ';') {
+			while (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' || ch == ';') {
 
 				if (ch == ';') {
 					while (ch != '\n' && ch != -1)
@@ -121,33 +121,22 @@ public class Scanner {
 			}
 
 			// Identifiers
-			else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
-                        ch == '+' || ch == '-' || ch == '*' || ch == '/' ||
-                        ch == '<' || ch == '>' || ch == '=' || ch == '?' ||
-                        ch == '!' || ch == '_'
+			else if (isIdentStart(ch)
 				/* or ch is some other valid first character for an identifier */) {
 				// TODO: scan an identifier into the buffer variable buf
 				int i = 0;
-				while (true) {
-					buf[i++] = (byte)ch;
-					ch = in.read();
+					buf[i++] = (byte) ch;
 
-					if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
-                        ch == '+' || ch == '-' || ch == '*' || ch == '/' ||
-                        ch == '<' || ch == '>' || ch == '=' || ch == '?' ||
-                        ch == '!' || ch == '_') {
-						continue;
+					while (true) {
+						ch = in.read();
+						if (ch == -1 || !isIdentPart(ch)) break;
+						buf[i++] = (byte) ch;
 					}
-					
-					else {
-						in.unread(ch);
-						break;
-					}
-				}
+					if (ch != -1) in.unread(ch);
 				// Put the character after the identifier back into the input
 				// in.unread(ch);
 
-				return new IdentToken(new String(buf, 0, i));
+				return new IdentToken(new String(buf, 0, i).toLowerCase());
 			}
 
 			// Illegal character
@@ -158,6 +147,34 @@ public class Scanner {
 		} catch (IOException e) {
 			System.err.println("IOException: " + e.getMessage());
 			return null;
+		}
+	}
+	private boolean isIdentStart(int ch) {
+		if (Character.isLetter(ch)) return true;
+		switch (ch) {
+			case '+': case '-': case '*': case '/':
+			case '<': case '>': case '=': case '?':
+			case '!': case '_':
+			case '$': case '%': case '&': case ':':
+			case '^': case '~':
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	private boolean isIdentPart(int ch) {
+		if (Character.isLetterOrDigit(ch)) return true;
+		switch (ch) {
+			case '+': case '-': case '*': case '/':
+			case '<': case '>': case '=': case '?':
+			case '!': case '_':
+			case '$': case '%': case '&': case ':':
+			case '^': case '~':
+				return true;
+			default:
+				
+			return false;
 		}
 	}
 }

@@ -9,13 +9,13 @@ public class StrLit extends Node {
         strVal = s;
     }
 
+    
     public void print(int n) {
-        for (int i = 0; i < n; i++)
-            System.out.print(" ");
-
-        System.out.println("\"" + strVal + "\"");
+        for (int i = 0; i < n; i++) System.out.print(" ");
+        System.out.print("\"" + strVal + "\"");   // ✅ println -> print
     }
 
+    
     public boolean isString() {
         return true;
     }

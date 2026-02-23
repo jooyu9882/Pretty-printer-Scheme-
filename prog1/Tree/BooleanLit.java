@@ -20,15 +20,8 @@ public class BooleanLit extends Node {
     }
 
     public void print(int n) {
-        // There got to be a more efficient way to print n spaces.
-        for (int i = 0; i < n; i++)
-            System.out.print(" ");
-
-        if (boolVal) {
-            System.out.println("#t");
-        } else {
-            System.out.println("#f");
-        }
+        for (int i = 0; i < n; i++) System.out.print(" ");
+        System.out.print(boolVal ? "#t" : "#f"); // println ❌
     }
 
     public boolean isBoolean() {

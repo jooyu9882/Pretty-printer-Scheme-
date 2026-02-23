@@ -1,5 +1,4 @@
 // IntLit -- Parse tree node class for representing integer literals
-
 package Tree;
 
 public class IntLit extends Node {
@@ -10,10 +9,8 @@ public class IntLit extends Node {
     }
 
     public void print(int n) {
-        for (int i = 0; i < n; i++)
-            System.out.print(" ");
-
-        System.out.println(intVal);
+        for (int i = 0; i < n; i++) System.out.print(" ");
+        System.out.print(intVal); // no println
     }
 
     public boolean isNumber() {

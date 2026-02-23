@@ -49,6 +49,7 @@ public class SPP {
 		root = parser.parseExp();
 		while (root != null) {
 			root.print(0);
+			System.out.println();
 			root = parser.parseExp();
 		}
 		System.exit(0);

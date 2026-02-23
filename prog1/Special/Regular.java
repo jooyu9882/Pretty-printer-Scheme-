@@ -1,40 +1,37 @@
-// Regular -- Parse tree node stratagy for printing regular lists
-
+// Regular -- Parse tree node strategy for printing regular lists
 package Special;
 
 import Tree.Cons;
 import Tree.Node;
+import Tree.Nil;
 
 public class Regular extends Special {
 
+    @Override
     public void print(Node t, int n, boolean p) {
-        Cons c = (Cons) t;
-
         if (!p) {
             indent(n);
             System.out.print("(");
         }
 
         Node current = t;
-
-        boolean firstElem = true;
+        boolean first = true;
 
         while (current.isPair()) {
             Cons cell = (Cons) current;
+            Node elem = cell.getCar();
 
-            if (!firstElem) {
-                System.out.print(" ");
-            }
+            if (!first) System.out.print(" ");
 
-            cell.getCar().print(n, true);
+            elem.print(0, false);
 
             current = cell.getCdr();
-            firstElem = false;
+            first = false;
         }
 
         if (!current.isNull()) {
             System.out.print(" . ");
-            current.print(n, true);
+            current.print(0, false);
         }
 
         System.out.print(")");
