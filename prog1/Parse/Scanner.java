@@ -12,7 +12,6 @@ import Tokens.StrToken;
 
 public class Scanner {
 
-```
 private PushbackInputStream in;
 
 private int BUFSIZE = 1000;
@@ -145,6 +144,5 @@ public Token getNextToken() {
         return null;
     }
 }
-```
 
 }
