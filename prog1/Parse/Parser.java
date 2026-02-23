@@ -6,19 +6,19 @@ import Special.*;
 
 /**
  * Parser.java
- * Recursive-descent parser for a subset of Scheme.
+ * A clean, compilable Parser class for a Scheme-like language.
  */
 public class Parser {
     private Scanner scanner;
     private Token lookahead = null;   // one-token lookahead
 
     public Parser(Scanner s) {
-        scanner = s;
+        this.scanner = s;
     }
 
-    /*------------------------------------------------------------*/
-    /* Token helpers                                               */
-    /*------------------------------------------------------------*/
+    /*----------------------------*/
+    /* Token helpers             */
+    /*----------------------------*/
 
     private Token nextToken() {
         if (lookahead != null) {
@@ -33,13 +33,13 @@ public class Parser {
         lookahead = t;
     }
 
-    /*------------------------------------------------------------*/
-    /* Parse Expression                                            */
-    /*------------------------------------------------------------*/
+    /*----------------------------*/
+    /* Parse expressions          */
+    /*----------------------------*/
 
     public Node parseExp() {
         Token tok = nextToken();
-        if (tok == null) return null;
+        if (tok == null) return null;  // EOF
 
         switch (tok.getType()) {
             case TRUE:
@@ -55,8 +55,7 @@ public class Parser {
             case QUOTE:
                 Node quoted = parseExp();
                 if (quoted == null) quoted = Nil.getInstance();
-                return new Cons(new Ident("quote"),
-                        new Cons(quoted, Nil.getInstance()));
+                return new Cons(new Ident("quote"), new Cons(quoted, Nil.getInstance()));
             case LPAREN:
                 return parseList();
             case RPAREN:
@@ -67,61 +66,59 @@ public class Parser {
         }
     }
 
-    /*------------------------------------------------------------*/
-    /* Parse List (flat sequences)                                 */
-    /*------------------------------------------------------------*/
+    /*----------------------------*/
+    /* Parse lists                */
+    /*----------------------------*/
 
     private Node parseList() {
         Token tok = nextToken();
-
         if (tok == null) {
             System.err.println("Unexpected EOF in list");
             return Nil.getInstance();
         }
 
-        // empty list ()
         if (tok.getType() == TokenType.RPAREN) {
-            return Nil.getInstance();
+            return Nil.getInstance();  // empty list
         }
 
-        // push back first token to parse as element
         pushBack(tok);
         Node first = parseExp();
         if (first == null) first = Nil.getInstance();
 
-        // check for dotted pair
         tok = nextToken();
         if (tok != null && tok.getType() == TokenType.DOT) {
             Node second = parseExp();
             if (second == null) second = Nil.getInstance();
-            Token close = nextToken();
-            if (close == null || close.getType() != TokenType.RPAREN)
+            tok = nextToken();
+            if (tok == null || tok.getType() != TokenType.RPAREN)
                 System.err.println("Expected ')' after dotted pair");
             return new Cons(first, second);
         }
 
-        // if not RPAREN, push back for recursion
         if (tok != null && tok.getType() != TokenType.RPAREN)
             pushBack(tok);
 
         Node rest = parseList();
         Cons consNode = new Cons(first, rest);
-        consNode.setForm(determineSpecial(first));
 
-        // if we hit RPAREN, stop recursion and return list
-        if (tok != null && tok.getType() == TokenType.RPAREN)
-            return consNode;
+        // Determine if this is a special form
+        if (first instanceof Ident) {
+            consNode.setForm(determineSpecial(first));
+        } else {
+            consNode.setForm(new Regular());
+        }
 
         return consNode;
     }
 
-    /*------------------------------------------------------------*/
-    /* Determine which special form to attach to a cons node      */
-    /*------------------------------------------------------------*/
+    /*----------------------------*/
+    /* Determine special forms    */
+    /*----------------------------*/
 
     private Special determineSpecial(Node first) {
         if (!(first instanceof Ident)) return new Regular();
-        switch (((Ident) first).getName()) {
+        String name = ((Ident) first).getName();
+        switch (name) {
             case "quote": return new Quote();
             case "lambda": return new Lambda();
             case "begin": return new Begin();
