@@ -4,6 +4,10 @@ import Tree.*;
 import Tokens.*;
 import Special.*;
 
+/**
+ * Parser.java
+ * Recursive-descent parser for a subset of Scheme.
+ */
 public class Parser {
     private Scanner scanner;
     private Token lookahead = null;   // one-token lookahead
@@ -35,8 +39,7 @@ public class Parser {
 
     public Node parseExp() {
         Token tok = nextToken();
-        if (tok == null)
-            return null;
+        if (tok == null) return null;
 
         switch (tok.getType()) {
             case TRUE:
@@ -81,10 +84,12 @@ public class Parser {
             return Nil.getInstance();
         }
 
+        // push back first token to parse as element
         pushBack(tok);
         Node first = parseExp();
         if (first == null) first = Nil.getInstance();
 
+        // check for dotted pair
         tok = nextToken();
         if (tok != null && tok.getType() == TokenType.DOT) {
             Node second = parseExp();
@@ -95,6 +100,7 @@ public class Parser {
             return new Cons(first, second);
         }
 
+        // if not RPAREN, push back for recursion
         if (tok != null && tok.getType() != TokenType.RPAREN)
             pushBack(tok);
 
@@ -102,11 +108,16 @@ public class Parser {
         Cons consNode = new Cons(first, rest);
         consNode.setForm(determineSpecial(first));
 
+        // if we hit RPAREN, stop recursion and return list
         if (tok != null && tok.getType() == TokenType.RPAREN)
             return consNode;
 
         return consNode;
     }
+
+    /*------------------------------------------------------------*/
+    /* Determine which special form to attach to a cons node      */
+    /*------------------------------------------------------------*/
 
     private Special determineSpecial(Node first) {
         if (!(first instanceof Ident)) return new Regular();
