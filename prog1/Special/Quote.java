@@ -1,11 +1,11 @@
-// Quote -- Parse tree node strategy for printing the special form quote
-
 package Special;
 
-import Tree.Node;
+import Tree.*;
 
 public class Quote extends Special {
- 
     public void print(Node t, int n, boolean p) {
+        Cons c = (Cons) t;
+        System.out.print("'");
+        c.getCdr().getCar().print(0);
     }
 }
