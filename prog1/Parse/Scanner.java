@@ -121,7 +121,10 @@ public class Scanner {
 			}
 
 			// Identifiers
-			else if (ch >= 'A' && ch <= 'Z'
+			else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
+                        ch == '+' || ch == '-' || ch == '*' || ch == '/' ||
+                        ch == '<' || ch == '>' || ch == '=' || ch == '?' ||
+                        ch == '!' || ch == '_'
 				/* or ch is some other valid first character for an identifier */) {
 				// TODO: scan an identifier into the buffer variable buf
 				int i = 0;
@@ -129,7 +132,10 @@ public class Scanner {
 					buf[i++] = (byte)ch;
 					ch = in.read();
 
-					if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) {
+					if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
+                        ch == '+' || ch == '-' || ch == '*' || ch == '/' ||
+                        ch == '<' || ch == '>' || ch == '=' || ch == '?' ||
+                        ch == '!' || ch == '_') {
 						continue;
 					}
 					
