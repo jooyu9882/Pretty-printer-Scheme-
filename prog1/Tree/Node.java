@@ -61,16 +61,18 @@ public class Node {
     // using parseList.
 
     public Node getCar() {
-        return null;
+        throw new UnsupportedOperationException("Not a pair");
     }
 
     public Node getCdr() {
-        return null;
+        throw new UnsupportedOperationException("Not a pair");
     }
 
     public void setCar(Node a) {
+        throw new UnsupportedOperationException("Not a pair");
     }
 
     public void setCdr(Node d) {
+        throw new UnsupportedOperationException("Not a pair");
     }
 }

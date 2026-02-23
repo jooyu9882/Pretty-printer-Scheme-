@@ -15,4 +15,8 @@ public class IntLit extends Node {
 
         System.out.println(intVal);
     }
+
+    public boolean isNumber() {
+        return true;
+    }
 }

@@ -71,4 +71,26 @@ public class Cons extends Node {
     public void print(int n, boolean p) {
         form.print(this, n, p);
     }
+
+    public boolean isPair() {
+        return true;
+    }
+
+    public Node getCar() {
+        return car;
+    }
+
+    public Node getCdr() {
+        return cdr;
+    }
+
+    public void setCar(Node a) {
+        car = a;
+        parseList();
+    }
+
+    public void setCdr(Node d) {
+        cdr = d;
+        parseList();
+    }
 }
