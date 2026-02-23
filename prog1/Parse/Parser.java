@@ -63,11 +63,10 @@ public class Parser {
             return Nil.getInstance();
         }
 
-        // rest -> exp+ [. exp] )
-        // exp들을 계속 읽어서 마지막에 Cons로 연결
+        
         java.util.ArrayList<Node> items = new java.util.ArrayList<>();
 
-        // exp+ 이므로 최소 1개
+        
         items.add(parseExp());
         if (items.get(0) == null) return null;
 
@@ -92,14 +91,14 @@ public class Parser {
                 return buildList(items, tail);
             }
 
-            // 다음 exp 계속
+            
             Node nextExp = parseExp();
             if (nextExp == null) return null;
             items.add(nextExp);
         }
     }
     
-    // items를 (a b c . tail) 형태로 연결
+    
     private Node buildList(java.util.ArrayList<Node> items, Node tail) {
         Node result = tail;
         for (int i = items.size() - 1; i >= 0; i--) {
