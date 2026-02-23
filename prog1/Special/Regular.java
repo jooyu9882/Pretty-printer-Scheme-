@@ -10,30 +10,31 @@ public class Regular extends Special {
     public void print(Node t, int n, boolean p) {
         Cons c = (Cons) t;
 
-        // If caller hasn't already printed '(' then do it here.
         if (!p) {
             indent(n);
             System.out.print("(");
         }
 
-        // Print first element
-        Node first = c.getCar();
-        first.print(n);
+        Node current = t;
 
-        // Print rest of list
-        Node rest = c.getCdr();
-        while (!rest.isNull()) {
-            if (rest.isPair()) {
+        boolean firstElem = true;
+
+        while (current.isPair()) {
+            Cons cell = (Cons) current;
+
+            if (!firstElem) {
                 System.out.print(" ");
-                Node elem = rest.getCar();
-                elem.print(n);
-                rest = rest.getCdr();
-            } else {
-                // dotted pair
-                System.out.print(" . ");
-                rest.print(n);
-                break;
             }
+
+            cell.getCar().print(n, true);
+
+            current = cell.getCdr();
+            firstElem = false;
+        }
+
+        if (!current.isNull()) {
+            System.out.print(" . ");
+            current.print(n, true);
         }
 
         System.out.print(")");

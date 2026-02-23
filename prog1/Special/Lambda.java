@@ -17,16 +17,14 @@ public class Lambda extends Special {
 
         System.out.print("lambda ");
 
-        // parameter list
         Node params = c.getCdr().getCar();
-        params.print(n + 2);
+        params.print(n, true);
 
-        // body
         Node body = c.getCdr().getCdr();
+
         while (!body.isNull()) {
-            System.out.println();
-            indent(n + 2);
-            body.getCar().print(n + 2);
+            System.out.print(" ");
+            body.getCar().print(n, true);
             body = body.getCdr();
         }
 
