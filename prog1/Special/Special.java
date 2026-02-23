@@ -12,8 +12,10 @@ abstract public class Special {
     abstract public void print(Node t, int n, boolean p);
 
     protected static void indent(int n) {
+        
         for (int i = 0; i < n; i++) {
             System.out.print(" ");
         }
+        
     }
 }

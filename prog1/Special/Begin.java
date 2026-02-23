@@ -6,6 +6,7 @@ import Tree.Cons;
 import Tree.Node;
 
 public class Begin extends Special {
+    
     @Override
     public void print(Node t, int n, boolean p) {
         Cons c = (Cons) t;

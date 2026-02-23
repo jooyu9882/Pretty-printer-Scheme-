@@ -125,14 +125,18 @@ public class Scanner {
 				/* or ch is some other valid first character for an identifier */) {
 				// TODO: scan an identifier into the buffer variable buf
 				int i = 0;
-					buf[i++] = (byte) ch;
+				buf[i++] = (byte) ch;
 
-					while (true) {
-						ch = in.read();
-						if (ch == -1 || !isIdentPart(ch)) break;
-						buf[i++] = (byte) ch;
-					}
-					if (ch != -1) in.unread(ch);
+				while (true) {
+					ch = in.read();
+
+					if (ch == -1 || !isIdentPart(ch)) break;
+
+					buf[i++] = (byte) ch;
+				}
+
+				if (ch != -1) in.unread(ch);
+				
 				// Put the character after the identifier back into the input
 				// in.unread(ch);
 
@@ -149,8 +153,11 @@ public class Scanner {
 			return null;
 		}
 	}
+
 	private boolean isIdentStart(int ch) {
+
 		if (Character.isLetter(ch)) return true;
+
 		switch (ch) {
 			case '+': case '-': case '*': case '/':
 			case '<': case '>': case '=': case '?':
@@ -158,13 +165,17 @@ public class Scanner {
 			case '$': case '%': case '&': case ':':
 			case '^': case '~':
 				return true;
+
 			default:
 				return false;
 		}
+
 	}
 
 	private boolean isIdentPart(int ch) {
+
 		if (Character.isLetterOrDigit(ch)) return true;
+		
 		switch (ch) {
 			case '+': case '-': case '*': case '/':
 			case '<': case '>': case '=': case '?':

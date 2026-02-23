@@ -6,8 +6,10 @@ import Tree.Cons;
 import Tree.Node;
 
 public class Quote extends Special {
+
     @Override
     public void print(Node t, int n, boolean p) {
+        
         if (!p) indent(n);
 
         // t = (quote <exp>)

@@ -11,8 +11,10 @@ public class StrLit extends Node {
 
     
     public void print(int n) {
+        
         for (int i = 0; i < n; i++) System.out.print(" ");
-        System.out.print("\"" + strVal + "\"");   // ✅ println -> print
+
+        System.out.print("\"" + strVal + "\"");   // no pirintln
     }
 
     

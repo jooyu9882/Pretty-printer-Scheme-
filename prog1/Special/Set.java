@@ -25,7 +25,7 @@ public class Set extends Special {
         
         Node expr = c.getCdr().getCdr().getCar();
         expr.print(0, false);
-        
+    
         System.out.print(")");
     }
 }

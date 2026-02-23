@@ -8,6 +8,7 @@ public class Regular extends Special {
 
     @Override
     public void print(Node t, int n, boolean p) {
+
         if (!p) {
             indent(n);
             System.out.print("(");
@@ -23,7 +24,6 @@ public class Regular extends Special {
             if (!first) System.out.print(" ");
 
             elem.print(0, false);
-
             current = cell.getCdr();
             first = false;
         }

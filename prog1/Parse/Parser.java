@@ -13,9 +13,11 @@ public class Parser {
     }
 
     private Token getToken() {
+
         if (currentToken == null) {
             currentToken = scanner.getNextToken();
         }
+
         return currentToken;
     }
 
@@ -27,11 +29,15 @@ public class Parser {
 
     public Node parseExp() {
         Token tok = getToken();
+
         if (tok == null) {
-            return null; // EOF
+            return null; 
         }
+
         consumeToken();
+
         switch (tok.getType()) {
+
             case LPAREN:
                 return parseRest();
             case TRUE:
@@ -47,16 +53,17 @@ public class Parser {
                 return new StrLit(tok.getStrVal());
             case IDENT:
                 return new Ident(tok.getName());
+
             default:
-                // Error, but assume correct
                 return null;
+                
         }
     }
 
     protected Node parseRest() {
         // rest -> )
         Token tok = getToken();
-        if (tok == null) return null; // unexpected EOF
+        if (tok == null) return null; // end
 
         if (tok.getType() == TokenType.RPAREN) {
             consumeToken();
@@ -98,7 +105,7 @@ public class Parser {
         }
     }
     
-    
+    // TODO: Add any additional methods you might need.
     private Node buildList(java.util.ArrayList<Node> items, Node tail) {
         Node result = tail;
         for (int i = items.size() - 1; i >= 0; i--) {
@@ -106,5 +113,4 @@ public class Parser {
         }
         return result;
     }
-    // TODO: Add any additional methods you might need.
 }

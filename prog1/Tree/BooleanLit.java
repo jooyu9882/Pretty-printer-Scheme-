@@ -21,7 +21,7 @@ public class BooleanLit extends Node {
 
     public void print(int n) {
         for (int i = 0; i < n; i++) System.out.print(" ");
-        System.out.print(boolVal ? "#t" : "#f"); // println ❌
+        System.out.print(boolVal ? "#t" : "#f"); // no println 
     }
 
     public boolean isBoolean() {
