@@ -3,7 +3,6 @@ package Special;
 
 import Tree.Cons;
 import Tree.Node;
-import Tree.Nil;
 
 public class Regular extends Special {
 
